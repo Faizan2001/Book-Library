@@ -76,6 +76,18 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
+
+  function validateForm() {
+    const author = document.getElementById("author").value;
+    const title = document.getElementById("title").value;
+    const pages = document.getElementById("pages").value;
+
+    let isValid = true;
+
+    // Validate ze author 
+    
+     
+  }
   
 
   addCardButton.onclick = function () {
