@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
     myLibrary.forEach((book, index) => {
       book.index = index;
     });
-  
+
     const books = document.querySelectorAll(".book");
     books.forEach((book, index) => {
       // Update only the index paragraph
@@ -78,17 +78,61 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function validateForm() {
-    const author = document.getElementById("author").value;
-    const title = document.getElementById("title").value;
-    const pages = document.getElementById("pages").value;
+    const authorEle = document.getElementById("author");
+    const titleEle = document.getElementById("title");
+    const pagesEle = document.getElementById("pages");
 
     let isValid = true;
 
-    // Validate ze author 
-    
-     
+    // Validate ze author
+    if (authorEle.value.trim() === "") {
+      //authorEle.setCustomValidity("Author cannot be empty!.");
+      authorEle.reportValidity();
+      isValid = false;
+    } else {
+      authorEle.setCustomValidity("");
+    }
+
+    // Title validation
+    if (titleEle.value.trim() === "") {
+      titleEle.setCustomValidity("Title cannot be empty.");
+      titleEle.reportValidity();
+      isValid = false;
+    } else {
+      titleEle.setCustomValidity("");
+    }
+
+    // Validate pages
+    if (!/^\d+$/.test(pagesEle.value.trim())) {
+      //checks if value is numerical with regex
+      pagesEle.setCustomValidity("Pages must be a numerical value.");
+      pagesEle.reportValidity();
+      isValid = false;
+    } else {
+      pagesEle.setCustomValidity("");
+    }
+
+    // Show validation messages if needed
+
+    console.log("Author Valid:", authorEle.validationMessage);
+    console.log("Title Valid:", titleEle.validationMessage);
+    console.log("Pages Valid:", pagesEle.validationMessage);
+
+    return isValid;
   }
-  
+
+  // Event listeners to clear the custom validity messages when user types
+  document.getElementById("author").addEventListener("input", function () {
+    this.setCustomValidity(""); // Clear custom validity on input
+  });
+
+  document.getElementById("title").addEventListener("input", function () {
+    this.setCustomValidity(""); // Clear custom validity on input
+  });
+
+  document.getElementById("pages").addEventListener("input", function () {
+    this.setCustomValidity(""); // Clear custom validity on input
+  });
 
   addCardButton.onclick = function () {
     modal.style.display = "block";
@@ -106,10 +150,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   form.onsubmit = function (event) {
     event.preventDefault();
-    addBookToLibrary();
-    console.log(myLibrary);
 
-    modal.style.display = "none";
-    form.reset();
+    if (validateForm()) {
+      addBookToLibrary();
+      console.log(myLibrary);
+
+      modal.style.display = "none";
+      form.reset();
+    }
   };
 });
